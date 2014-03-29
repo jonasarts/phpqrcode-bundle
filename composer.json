@@ -1,0 +1,25 @@
+{
+    "name": "jonasarts/phpqrcode-bundle",
+    "description": "A PHP QR Code Bundle for Symfony",
+    "keywords": ["QR", "Code"],
+    "homepage": "https://github.com/jonasarts/phpqrcode-bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonas Hauser",
+            "email": "symfony@jonasarts.com",
+            "homepage": "http://www.jonasarts.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/dependency-injection": ">=2.4",
+        "symfony/yaml": ">=2.4"
+    },
+    "autoload": {
+        "psr-0": { "jonasarts\\Bundle\\PHPQRCodeBundle": "" }
+    },
+    "target-dir": "jonasarts/Bundle/PHPQRCodeBundle"
+}
