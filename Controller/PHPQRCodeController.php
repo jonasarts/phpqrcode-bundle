@@ -70,7 +70,7 @@ class PHPQRCodeController extends Controller
      * 
      * @Route("/png/{level}/{size}/{margin}", name="qrcode_png")
      */
-    public function getQRCodePNGAction($text, $level, $size, $margin)
+    public function getQRCodePNGAction($level, $size, $margin)
     {
         $text = $this->getRequest()->query->get('text');
 
@@ -79,7 +79,7 @@ class PHPQRCodeController extends Controller
 
     /**
      * 
-     * @Route("/png/", name="qrcode_png_default")
+     * @Route("/png", name="qrcode_png_default")
      */
     public function getQRCodePNGwDefaultsAction()
     {
