@@ -11,7 +11,7 @@
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\Services;
 
-require_once __DIR__ . '/../lib/qrlib.php'; 
+require_once __DIR__ . '/../lib/qrlib.php';
 
 /**
  * PHP QR Code Service

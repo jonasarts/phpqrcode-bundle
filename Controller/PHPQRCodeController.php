@@ -72,8 +72,16 @@ class PHPQRCodeController extends Controller
      */
     public function getQRCodePNGAction($level, $size, $margin)
     {
-        $text = $this->getRequest()->query->get('text');
+        $text = 'getQRCodePNGAction has no text content';
 
+        if ($this->getRequest()->query->has('text')) {
+            $text = $this->getRequest()->query->get('text');
+        }
+
+        if (trim($text) == '') {
+            $text = 'EMPTY';
+        }
+        
         $this->getQRCodePNG($text, $level, $size, $margin);
     }
 
@@ -83,8 +91,20 @@ class PHPQRCodeController extends Controller
      */
     public function getQRCodePNGwDefaultsAction()
     {
-        $text = $this->getRequest()->query->get('text');
+        $text = 'getQRCodePNGwDefaultsAction has no text content';
 
-        $this->getQRCodePNG($text, 'Q', 4, 3);
+        if ($this->getRequest()->query->has('text')) {
+            $text = $this->getRequest()->query->get('text');
+        }
+
+        if (trim($text) == '') {
+            $text = 'EMPTY';
+        }
+
+        $level = $this->container->getParameter('phpqrcode.default.level');
+        $size = $this->container->getParameter('phpqrcode.default.size');
+        $margin = $this->container->getParameter('phpqrcode.default.margin');
+
+        $this->getQRCodePNG($text, $level, $size, $margin);
     }
 }
