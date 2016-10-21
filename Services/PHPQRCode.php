@@ -18,9 +18,12 @@ require_once __DIR__ . '/../lib/qrlib.php';
  */
 class PHPQRCode
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-
+        //
     }
 
     /**
@@ -42,6 +45,8 @@ class PHPQRCode
      */
     public function generatePNG($text, $outfile = false, $level = 'L', $size = 3, $margin = 4, $saveandprint = false)
     {
+        header("Content-type: image/png");
+        
         \QRcode::png($text, $outfile, $level, $size, $margin, $saveandprint);
 
         exit(0);

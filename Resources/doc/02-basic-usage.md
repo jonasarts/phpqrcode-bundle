@@ -6,7 +6,7 @@ The service class provides methods to generate the different QR Code images.
 Retrieve the service like any other symfony service:
 
 ```php
-    $tbs = $this->get('phpqrcode');
+    $qrc = $this->get('phpqrcode');
 ```
 
 In the php code examples, ``$this`` referes to a controller.
@@ -24,6 +24,10 @@ In the php code examples, ``$this`` referes to a controller.
 
 ```html
     <img src='/qr/png?text=Test'>
+```
+
+```twig
+    <img src="{{ path('qrcode_png_default', { 'text': 'Test' }) }}">
 ```
 
 Eventually, you need to encode the text value:

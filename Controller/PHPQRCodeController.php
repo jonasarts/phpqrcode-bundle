@@ -45,7 +45,7 @@ class PHPQRCodeController extends Controller
      */
     public function __construct()
     {
-        
+        //
     }
 
     /**
@@ -70,12 +70,12 @@ class PHPQRCodeController extends Controller
      * 
      * @Route("/png/{level}/{size}/{margin}", name="qrcode_png")
      */
-    public function getQRCodePNGAction($level, $size, $margin)
+    public function getQRCodePNGAction(Request $request, $level, $size, $margin)
     {
         $text = 'getQRCodePNGAction has no text content';
 
-        if ($this->getRequest()->query->has('text')) {
-            $text = $this->getRequest()->query->get('text');
+        if ($request->query->has('text')) {
+            $text = $request->query->get('text');
         }
 
         if (trim($text) == '') {
@@ -89,12 +89,12 @@ class PHPQRCodeController extends Controller
      * 
      * @Route("/png", name="qrcode_png_default")
      */
-    public function getQRCodePNGwDefaultsAction()
+    public function getQRCodePNGwDefaultsAction(Request $request)
     {
         $text = 'getQRCodePNGwDefaultsAction has no text content';
 
-        if ($this->getRequest()->query->has('text')) {
-            $text = $this->getRequest()->query->get('text');
+        if ($request->query->has('text')) {
+            $text = $request->query->get('text');
         }
 
         if (trim($text) == '') {

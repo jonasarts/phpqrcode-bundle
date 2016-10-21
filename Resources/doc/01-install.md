@@ -10,9 +10,8 @@ First add the bundle to your composer.json file:
     // ...
     "require": {
         // ...
-        "jonasarts/phpqrcode-bundle": "1.0.*"
+        "jonasarts/phpqrcode-bundle": "^1.*"
     },
-    "minimum-stability": "stable",
     // ...
 }
 ```
