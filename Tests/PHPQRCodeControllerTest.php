@@ -20,48 +20,119 @@ class PHPQRCodeControllerTest extends WebTestCase
     private $user = 'test';
     private $pass = 'te$t';
 
-    /*
-    public function testIndex()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/hello/Fabien');
-
-        $this->assertTrue($crawler->filter('html:contains("Hello Fabien")')->count() > 0);
-    }
-    */
-
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testGetQRCodePNGAction()
     {
         $client = static::createClient();
 
-        /* png output not yet testable
-        $crawler = $client->request('GET', '/qr/png', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
+        //$crawler = $client->request('GET', '/qr/png', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
+        ob_start();
+        $crawler = $client->request('GET', '/qr/png', array(), array(), array());
         $response = $client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'image/png'), $response->headers);
+        $response->sendContent();
+        $content = ob_get_clean();
 
-        $crawler = $client->request('GET', '/qr/png?text=Test', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
-        $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'image/png'), $response->headers);
-        */
+        $this->assertEquals('image/png', $client->getResponse()->headers->get('Content-type'));
+
+        //$crawler = $client->request('GET', '/qr/png?text=Test', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
+        ob_start();
+        $crawler = $client->request('GET', '/qr/png?text=Test', array(), array(), array());
+        $response = $client->getResponse();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('image/png', $client->getResponse()->headers->get('Content-type'));
+        //*/
     }
 
-    public function testGetQRCodePNGwDefaultsAction()
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testGetQRCodePNGwValuesAction()
     {
         $client = static::createClient();
 
-        /* png output not yet testable
-        $crawler = $client->request('GET', '/qr/png/Q/4/3', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
+        //$crawler = $client->request('GET', '/qr/png/Q/4/3', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
+        ob_start();
+        $crawler = $client->request('GET', '/qr/png/Q/4/3', array(), array(), array());
         $response = $client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'image/png'), $response->headers);
+        $response->sendContent();
+        $content = ob_get_clean();
 
-        $crawler = $client->request('GET', '/qr/png/Q/4/3?text=Test', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
-        $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'image/png'), $response->headers);
-        */
+        $this->assertEquals('image/png', $client->getResponse()->headers->get('Content-type'));
+
+        //$crawler = $client->request('GET', '/qr/png/Q/4/3?text=Test', array(), array(), array('PHP_AUTH_USER' => $this->user, 'PHP_AUTH_PW' => $this->pass));
+        ob_start();
+        $crawler = $client->request('GET', '/qr/png/Q/4/3?text=Test', array(), array(), array());
+        $response = $client->getResponse();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('image/png', $client->getResponse()->headers->get('Content-type'));
+        //*/
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testGetQRCodeSVGAction()
+    {
+        $client = static::createClient();
+
+        ob_start();
+        $crawler = $client->request('GET', '/qr/svg', array(), array(), array());
+        $response = $client->getResponse();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('image/svg+xml', $client->getResponse()->headers->get('Content-Type'));
+
+        ob_start();
+        $crawler = $client->request('GET', '/qr/svg?text=Test', array(), array(), array());
+        $response = $client->getResponse();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('image/svg+xml', $client->getResponse()->headers->get('Content-Type'));
+        //*/
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testGetQRCodeSVGwValuesAction()
+    {
+        $client = static::createClient();
+
+        ob_start();
+        $crawler = $client->request('GET', '/qr/svg/Q/4/3', array(), array(), array());
+        $response = $client->getResponse();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('image/svg+xml', $client->getResponse()->headers->get('Content-Type'));
+
+        ob_start();
+        $crawler = $client->request('GET', '/qr/svg/Q/4/3?text=Test', array(), array(), array());
+        $response = $client->getResponse();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('image/svg+xml', $client->getResponse()->headers->get('Content-Type'));
+        //*/
     }
 }

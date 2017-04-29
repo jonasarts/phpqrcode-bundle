@@ -53,23 +53,40 @@ class PHPQRCodeController extends Controller
      * 
      * @param string  $text
      * @param string  $level
-     * @param integer $size
-     * @param integer $margin
-     * @return PNG
+     * @param int $size
+     * @param int $margin
+     * 
+     * @return Response
      */
-    public function getQRCodePNG($text, $level, $size, $margin)
+    private function getQRCodePNG($text, $level, $size, $margin)
     {
-        //QRcode::png('PHP QR Code :)', 'test.png', 'L', 4, 2);
+        //QRcode::png('PHP QR Code :)', 'test.png', QR_ECLEVEL_L, 4, 2);
         //QRcode::png('Testing', false, 'Q', 4, 3);
 
-        $this->getQR()->generatePNG($text, false, $level, $size, $margin);
+        return $this->getQR()->generatePNG($text, $level, $size, $margin);
+    }
 
-        exit(0);
+    /**
+     * 
+     * @param string  $text
+     * @param string  $level
+     * @param int $size
+     * @param int $margin
+     * 
+     * @return Response
+     */
+    private function getQRCodeSVG($text, $level, $size, $margin)
+    {
+        //QRcode::svg('PHP QR Code :)', 'id-of-svg', false, QR_ECLEVEL_L, 250);
+
+        return $this->getQR()->generateSVG($text, $level, 250, $size, $margin);
     }
 
     /**
      * 
      * @Route("/png/{level}/{size}/{margin}", name="qrcode_png")
+     * 
+     * @return Response
      */
     public function getQRCodePNGAction(Request $request, $level, $size, $margin)
     {
@@ -83,12 +100,14 @@ class PHPQRCodeController extends Controller
             $text = 'EMPTY';
         }
         
-        $this->getQRCodePNG($text, $level, $size, $margin);
+        return $this->getQRCodePNG($text, $level, $size, $margin);
     }
 
     /**
      * 
      * @Route("/png", name="qrcode_png_default")
+     * 
+     * @return Response
      */
     public function getQRCodePNGwDefaultsAction(Request $request)
     {
@@ -106,6 +125,52 @@ class PHPQRCodeController extends Controller
         $size = $this->container->getParameter('phpqrcode.default.size');
         $margin = $this->container->getParameter('phpqrcode.default.margin');
 
-        $this->getQRCodePNG($text, $level, $size, $margin);
+        return $this->getQRCodePNG($text, $level, $size, $margin);
+    }
+
+    /**
+     * 
+     * @Route("/svg/{level}/{size}/{margin}", name="qrcode_svg")
+     * 
+     * @return Response
+     */
+    public function getQRCodeSVGAction(Request $request, $level, $size, $margin)
+    {
+        $text = 'getQRCodeSVGAction has no text content';
+
+        if ($request->query->has('text')) {
+            $text = $request->query->get('text');
+        }
+
+        if (trim($text) == '') {
+            $text = 'EMPTY';
+        }
+        
+        return $this->getQRCodeSVG($text, $level, $size, $margin);
+    }
+
+    /**
+     * 
+     * @Route("/svg", name="qrcode_svg_default")
+     * 
+     * @return Response
+     */
+    public function getQRCodeSVGwDefaultsAction(Request $request)
+    {
+        $text = 'getQRCodeSVGwDefaultsAction has no text content';
+
+        if ($request->query->has('text')) {
+            $text = $request->query->get('text');
+        }
+
+        if (trim($text) == '') {
+            $text = 'EMPTY';
+        }
+
+        $level = $this->container->getParameter('phpqrcode.default.level');
+        $size = $this->container->getParameter('phpqrcode.default.size');
+        $margin = $this->container->getParameter('phpqrcode.default.margin');
+
+        return $this->getQRCodeSVG($text, $level, $size, $margin);
     }
 }

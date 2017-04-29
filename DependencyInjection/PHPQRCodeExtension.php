@@ -36,4 +36,14 @@ class PHPQRCodeExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
+
+    /**
+     * The extension alias to override the default extension name (which is phpqr_code)
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'phpqrcode';
+    }
 }

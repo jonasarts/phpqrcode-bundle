@@ -1,7 +1,7 @@
 phpqrcode-bundle
 ================
 
-This bundle provides a simplified access to the PHP QR Code class for the symfony framework.
+This bundle provides a simplified access to the PHP QR Code class for the Symfony framework.
 
 [![Latest Stable Version](https://poser.pugx.org/jonasarts/phpqrcode-bundle/v/stable.png)](https://packagist.org/packages/jonasarts/phpqrcode-bundle)
 
@@ -15,6 +15,8 @@ License
 
 This bundle is under the MIT license. See the complete license in the bundle:
 
-    LICENSE
+[LICENSE](https://github.com/jonasarts/phpqrcode-bundle/LICENSE)
+
+This Bundle uses the [t0k4rt/phpqrcode](https://github.com/t0k4rt/phpqrcode) library
 
 The PHP QR Code class is under the GNU Lesser General Public License version 3. [PHP QR Code Website](http://phpqrcode.sourceforge.net)

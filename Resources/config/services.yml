@@ -3,5 +3,5 @@ parameters:
 
 services:
     phpqrcode:
-        class: %jonasarts.phpqrcode.class%
+        class: "%jonasarts.phpqrcode.class%"
         arguments: []
