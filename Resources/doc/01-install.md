@@ -3,23 +3,10 @@ Setting up the bundle
 
 ## Install the bundle
 
-First add the bundle to your composer.json file: 
-
-```json
-{
-    // ...
-    "require": {
-        // ...
-        "jonasarts/phpqrcode-bundle": "^1.0"
-    },
-    // ...
-}
-```
-
-Then run composer.phar:
+Execute this console command in your project:
 
 ``` bash
-$ php composer.phar install
+$ composer require jonasarts/phpqrcode-bundle
 ```
 
 ## Enable the bundle
@@ -29,23 +16,44 @@ Enable the bundle in the kernel:
 ```php
 // app/AppKernel.php
 
-public function registerBundles()
+// ...
+class AppKernel extends Kernel
 {
-    $bundles = array(
+    // ...
+
+    public function registerBundles()
+    {
+        $bundles = array(
+            // ...
+            new jonasarts\Bundle\PHPQRCodeBundle\PHPQRCodeBundle(),
+        );
+
         // ...
-        new jonasarts\Bundle\PHPQRCodeBundle\PHPQRCodeBundle(),
-    );
+    }
 }
 ```
 
-And register the routes in *app/config/routing.yml*:
+And register the routes:
 
 ```yaml
-//...
+#app/config/routing.yml
 phpqrcode:
     resource: "@PHPQRCodeBundle/Controller/"
     type:     annotation
     prefix:   /
+```
+
+Optional, add a default configuration:
+
+```yaml
+# app/config/config.yml
+phpqrcode:
+    default:
+        level: Q
+        size: 4
+        margin: 3
+
+# ...
 ```
 
 ## That's it
