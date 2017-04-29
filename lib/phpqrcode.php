@@ -6,14 +6,15 @@
  * This file contains MERGED version of PHP QR Code library.
  * It was auto-generated from full version for your convenience.
  *
- * This merged version was configured to not requre any external files,
- * with disabled cache, error loging and weker but faster mask matching.
+ * This merged version was configured to not require any external files,
+ * with disabled cache, error logging and weaker but faster mask matching.
  * If you need tune it up please use non-merged version.
  *
  * For full version, documentation, examples of use please visit:
  *
  *    http://phpqrcode.sourceforge.net/
  *    https://sourceforge.net/projects/phpqrcode/
+ *    https://github.com/t0k4rt/phpqrcode
  *
  * PHP QR Code is distributed under LGPL 3
  * Copyright (C) 2010 Dominik Dzienia <deltalab at poczta dot fm>
@@ -295,6 +296,19 @@
                 <tr style="border-top:2px solid black"><th style="text-align:right">TOTAL: </th><td>'.number_format($lastTime-$startTime, 6).'s</td></tr>
             </tfoot>
             </table>';
+        }
+        
+        public static function save($content, $filename_path)
+        {           
+            try {
+                $handle = fopen($filename_path, "w");
+                fwrite($handle, $content);
+                fclose($handle);
+                return true;
+            } catch (Exception $e) {
+                echo 'Exception reçue : ',  $e->getMessage(), "\n";
+            }      
+            
         }
         
     }
@@ -932,16 +946,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
- 
+
     define('QR_IMAGE', true);
 
     class QRimage {
-    
+
         //----------------------------------------------------------------------
-        public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE) 
+        public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE, $back_color, $fore_color)
         {
-            $image = self::image($frame, $pixelPerPoint, $outerFrame);
-            
+            $image = self::image($frame, $pixelPerPoint, $outerFrame, $back_color, $fore_color);
+
             if ($filename === false) {
                 Header("Content-type: image/png");
                 ImagePng($image);
@@ -954,56 +968,69 @@
                     ImagePng($image, $filename);
                 }
             }
-            
+
             ImageDestroy($image);
         }
-    
+
         //----------------------------------------------------------------------
-        public static function jpg($frame, $filename = false, $pixelPerPoint = 8, $outerFrame = 4, $q = 85) 
+        public static function jpg($frame, $filename = false, $pixelPerPoint = 8, $outerFrame = 4, $q = 85)
         {
             $image = self::image($frame, $pixelPerPoint, $outerFrame);
-            
+
             if ($filename === false) {
                 Header("Content-type: image/jpeg");
                 ImageJpeg($image, null, $q);
             } else {
-                ImageJpeg($image, $filename, $q);            
+                ImageJpeg($image, $filename, $q);
             }
-            
+
             ImageDestroy($image);
         }
-    
+
         //----------------------------------------------------------------------
-        private static function image($frame, $pixelPerPoint = 4, $outerFrame = 4) 
+        private static function image($frame, $pixelPerPoint = 4, $outerFrame = 4, $back_color = 0xFFFFFF, $fore_color = 0x000000)
         {
             $h = count($frame);
             $w = strlen($frame[0]);
-            
+
             $imgW = $w + 2*$outerFrame;
             $imgH = $h + 2*$outerFrame;
-            
+
             $base_image =ImageCreate($imgW, $imgH);
-            
-            $col[0] = ImageColorAllocate($base_image,255,255,255);
-            $col[1] = ImageColorAllocate($base_image,0,0,0);
+
+            // convert a hexadecimal color code into decimal format (red = 255 0 0, green = 0 255 0, blue = 0 0 255)
+            $r1 = round((($fore_color & 0xFF0000) >> 16), 5);
+            $g1 = round((($fore_color & 0x00FF00) >> 8), 5);
+            $b1 = round(($fore_color & 0x0000FF), 5);
+
+            // convert a hexadecimal color code into decimal format (red = 255 0 0, green = 0 255 0, blue = 0 0 255)
+            $r2 = round((($back_color & 0xFF0000) >> 16), 5);
+            $g2 = round((($back_color & 0x00FF00) >> 8), 5);
+            $b2 = round(($back_color & 0x0000FF), 5);
+
+
+
+            $col[0] = ImageColorAllocate($base_image, $r2, $g2, $b2);
+            $col[1] = ImageColorAllocate($base_image, $r1, $g1, $b1);
 
             imagefill($base_image, 0, 0, $col[0]);
 
             for($y=0; $y<$h; $y++) {
                 for($x=0; $x<$w; $x++) {
                     if ($frame[$y][$x] == '1') {
-                        ImageSetPixel($base_image,$x+$outerFrame,$y+$outerFrame,$col[1]); 
+                        ImageSetPixel($base_image,$x+$outerFrame,$y+$outerFrame,$col[1]);
                     }
                 }
             }
-            
+
             $target_image =ImageCreate($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
             ImageCopyResized($target_image, $base_image, 0, 0, 0, 0, $imgW * $pixelPerPoint, $imgH * $pixelPerPoint, $imgW, $imgH);
             ImageDestroy($base_image);
-            
+
             return $target_image;
         }
     }
+
 
 
 
@@ -1058,7 +1085,6 @@
         
             if(!QRinput::check($mode, $size, $setData)) {
                 throw new Exception('Error m:'.$mode.',s:'.$size.',d:'.join(',',$setData));
-                return null;
             }
             
             $this->mode = $mode;
@@ -1296,7 +1322,6 @@
         {
             if ($version < 0 || $version > QRSPEC_VERSION_MAX || $level > QR_ECLEVEL_H) {
                 throw new Exception('Invalid version no');
-                return NULL;
             }
             
             $this->version = $version;
@@ -1633,7 +1658,6 @@
                 $ver = QRspec::getMinimumVersion((int)(($bits + 7) / 8), $this->level);
                 if($ver < 0) {
                     throw new Exception('WRONG VERSION');
-                    return -1;
                 } else if($ver > $this->getVersion()) {
                     $this->setVersion($ver);
                 } else {
@@ -1950,7 +1974,7 @@
  * The following data / specifications are taken from
  * "Two dimensional symbol -- QR-code -- Basic Specification" (JIS X0510:2004)
  *  or
- * "Automatic identification and data capture techniques -- 
+ * "Automatic identification and data capture techniques --
  *  QR Code 2005 bar code symbology specification" (ISO/IEC 18004:2006)
  *
  * This library is free software; you can redistribute it and/or
@@ -1974,46 +1998,46 @@
         public $modeHint;
 
         //----------------------------------------------------------------------
-        public function __construct($dataStr, $input, $modeHint) 
+        public function __construct($dataStr, $input, $modeHint)
         {
             $this->dataStr  = $dataStr;
             $this->input    = $input;
             $this->modeHint = $modeHint;
         }
-        
+
         //----------------------------------------------------------------------
         public static function isdigitat($str, $pos)
-        {    
+        {
             if ($pos >= strlen($str))
                 return false;
-            
+
             return ((ord($str[$pos]) >= ord('0'))&&(ord($str[$pos]) <= ord('9')));
         }
-        
+
         //----------------------------------------------------------------------
         public static function isalnumat($str, $pos)
         {
             if ($pos >= strlen($str))
                 return false;
-                
+
             return (QRinput::lookAnTable(ord($str[$pos])) >= 0);
         }
 
         //----------------------------------------------------------------------
         public function identifyMode($pos)
         {
-            if ($pos >= strlen($this->dataStr)) 
+            if ($pos >= strlen($this->dataStr))
                 return QR_MODE_NUL;
-                
+
             $c = $this->dataStr[$pos];
-            
+
             if(self::isdigitat($this->dataStr, $pos)) {
                 return QR_MODE_NUM;
             } else if(self::isalnumat($this->dataStr, $pos)) {
                 return QR_MODE_AN;
             } else if($this->modeHint == QR_MODE_KANJI) {
-            
-                if ($pos+1 < strlen($this->dataStr)) 
+
+                if ($pos+1 < strlen($this->dataStr))
                 {
                     $d = $this->dataStr[$pos+1];
                     $word = (ord($c) << 8) | ord($d);
@@ -2024,8 +2048,8 @@
             }
 
             return QR_MODE_8;
-        } 
-        
+        }
+
         //----------------------------------------------------------------------
         public function eatNum()
         {
@@ -2035,10 +2059,10 @@
             while(self::isdigitat($this->dataStr, $p)) {
                 $p++;
             }
-            
+
             $run = $p;
             $mode = $this->identifyMode($p);
-            
+
             if($mode == QR_MODE_8) {
                 $dif = QRinput::estimateBitsModeNum($run) + 4 + $ln
                      + QRinput::estimateBitsMode8(1)         // + 4 + l8
@@ -2055,14 +2079,14 @@
                     return $this->eatAn();
                 }
             }
-            
+
             $ret = $this->input->append(QR_MODE_NUM, $run, str_split($this->dataStr));
             if($ret < 0)
                 return -1;
 
             return $run;
         }
-        
+
         //----------------------------------------------------------------------
         public function eatAn()
         {
@@ -2070,18 +2094,18 @@
             $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
             $p = 0;
-            
+
             while(self::isalnumat($this->dataStr, $p)) {
                 if(self::isdigitat($this->dataStr, $p)) {
                     $q = $p;
                     while(self::isdigitat($this->dataStr, $q)) {
                         $q++;
                     }
-                    
+
                     $dif = QRinput::estimateBitsModeAn($p) // + 4 + la
                          + QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
                          - QRinput::estimateBitsModeAn($q); // - 4 - la
-                         
+
                     if($dif < 0) {
                         break;
                     } else {
@@ -2109,21 +2133,21 @@
 
             return $run;
         }
-        
+
         //----------------------------------------------------------------------
         public function eatKanji()
         {
             $p = 0;
-            
+
             while($this->identifyMode($p) == QR_MODE_KANJI) {
                 $p += 2;
             }
-            
+
             $ret = $this->input->append(QR_MODE_KANJI, $p, str_split($this->dataStr));
             if($ret < 0)
                 return -1;
 
-            return $run;
+            return $ret;
         }
 
         //----------------------------------------------------------------------
@@ -2134,9 +2158,9 @@
 
             $p = 1;
             $dataStrLen = strlen($this->dataStr);
-            
+
             while($p < $dataStrLen) {
-                
+
                 $mode = $this->identifyMode($p);
                 if($mode == QR_MODE_KANJI) {
                     break;
@@ -2174,7 +2198,7 @@
 
             $run = $p;
             $ret = $this->input->append(QR_MODE_8, $run, str_split($this->dataStr));
-            
+
             if($ret < 0)
                 return -1;
 
@@ -2190,22 +2214,22 @@
                     return 0;
 
                 $mode = $this->identifyMode(0);
-                
+
                 switch ($mode) {
                     case QR_MODE_NUM: $length = $this->eatNum(); break;
                     case QR_MODE_AN:  $length = $this->eatAn(); break;
                     case QR_MODE_KANJI:
-                        if ($hint == QR_MODE_KANJI)
+                        if ($mode == QR_MODE_KANJI)
                                 $length = $this->eatKanji();
                         else    $length = $this->eat8();
                         break;
                     default: $length = $this->eat8(); break;
-                
+
                 }
 
                 if($length == 0) return 0;
                 if($length < 0)  return -1;
-                
+
                 $this->dataStr = substr($this->dataStr, $length);
             }
         }
@@ -2215,9 +2239,9 @@
         {
             $stringLen = strlen($this->dataStr);
             $p = 0;
-            
+
             while ($p<$stringLen) {
-                $mode = self::identifyMode(substr($this->dataStr, $p), $this->modeHint);
+                $mode = self::identifyMode(substr($this->dataStr, $p));
                 if($mode == QR_MODE_KANJI) {
                     $p += 2;
                 } else {
@@ -2239,10 +2263,10 @@
             }
 
             $split = new QRsplit($string, $input, $modeHint);
-            
+
             if(!$casesensitive)
                 $split->toUpper();
-                
+
             return $split->splitString();
         }
     }
@@ -2496,22 +2520,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
- 
+
 	define('N1', 3);
 	define('N2', 3);
 	define('N3', 40);
 	define('N4', 10);
 
 	class QRmask {
-	
+
 		public $runLength = array();
-		
+
 		//----------------------------------------------------------------------
-		public function __construct() 
+		public function __construct()
         {
             $this->runLength = array_fill(0, QRSPEC_WIDTH_MAX + 1, 0);
         }
-        
+
         //----------------------------------------------------------------------
         public function writeFormatInformation($width, &$frame, $mask, $level)
         {
@@ -2525,7 +2549,7 @@
                 } else {
                     $v = 0x84;
                 }
-                
+
                 $frame[8][$width - 1 - $i] = chr($v);
                 if($i < 6) {
                     $frame[$i][8] = chr($v);
@@ -2534,7 +2558,7 @@
                 }
                 $format = $format >> 1;
             }
-            
+
             for($i=0; $i<7; $i++) {
                 if($format & 1) {
                     $blacks += 2;
@@ -2542,20 +2566,20 @@
                 } else {
                     $v = 0x84;
                 }
-                
+
                 $frame[$width - 7 + $i][8] = chr($v);
                 if($i == 0) {
                     $frame[8][7] = chr($v);
                 } else {
                     $frame[8][6 - $i] = chr($v);
                 }
-                
+
                 $format = $format >> 1;
             }
 
             return $blacks;
         }
-        
+
         //----------------------------------------------------------------------
         public function mask0($x, $y) { return ($x+$y)&1;                       }
         public function mask1($x, $y) { return ($y&1);                          }
@@ -2565,12 +2589,12 @@
         public function mask5($x, $y) { return (($x*$y)&1)+($x*$y)%3;           }
         public function mask6($x, $y) { return ((($x*$y)&1)+($x*$y)%3)&1;       }
         public function mask7($x, $y) { return ((($x*$y)%3)+(($x+$y)&1))&1;     }
-        
+
         //----------------------------------------------------------------------
         private function generateMaskNo($maskNo, $width, $frame)
         {
             $bitMask = array_fill(0, $width, array_fill(0, $width, 0));
-            
+
             for($y=0; $y<$width; $y++) {
                 for($x=0; $x<$width; $x++) {
                     if(ord($frame[$y][$x]) & 0x80) {
@@ -2579,42 +2603,42 @@
                         $maskFunc = call_user_func(array($this, 'mask'.$maskNo), $x, $y);
                         $bitMask[$y][$x] = ($maskFunc == 0)?1:0;
                     }
-                    
+
                 }
             }
-            
+
             return $bitMask;
         }
-        
+
         //----------------------------------------------------------------------
         public static function serial($bitFrame)
         {
             $codeArr = array();
-            
+
             foreach ($bitFrame as $line)
                 $codeArr[] = join('', $line);
-                
+
             return gzcompress(join("\n", $codeArr), 9);
         }
-        
+
         //----------------------------------------------------------------------
         public static function unserial($code)
         {
             $codeArr = array();
-            
+
             $codeLines = explode("\n", gzuncompress($code));
             foreach ($codeLines as $line)
                 $codeArr[] = str_split($line);
-            
+
             return $codeArr;
         }
-        
+
         //----------------------------------------------------------------------
-        public function makeMaskNo($maskNo, $width, $s, &$d, $maskGenOnly = false) 
+        public function makeMaskNo($maskNo, $width, $s, &$d, $maskGenOnly = false)
         {
             $b = 0;
             $bitMask = array();
-            
+
             $fileName = QR_CACHE_DIR.'mask_'.$maskNo.DIRECTORY_SEPARATOR.'mask_'.$width.'_'.$maskNo.'.dat';
 
             if (QR_CACHEABLE) {
@@ -2632,7 +2656,7 @@
 
             if ($maskGenOnly)
                 return;
-                
+
             $d = $s;
 
             for($y=0; $y<$width; $y++) {
@@ -2646,24 +2670,24 @@
 
             return $b;
         }
-        
+
         //----------------------------------------------------------------------
         public function makeMask($width, $frame, $maskNo, $level)
         {
             $masked = array_fill(0, $width, str_repeat("\0", $width));
             $this->makeMaskNo($maskNo, $width, $frame, $masked);
             $this->writeFormatInformation($width, $masked, $maskNo, $level);
-       
+
             return $masked;
         }
-        
+
         //----------------------------------------------------------------------
         public function calcN1N3($length)
         {
             $demerit = 0;
 
             for($i=0; $i<$length; $i++) {
-                
+
                 if($this->runLength[$i] >= 5) {
                     $demerit += (N1 + ($this->runLength[$i] - 5));
                 }
@@ -2685,7 +2709,7 @@
             }
             return $demerit;
         }
-        
+
         //----------------------------------------------------------------------
         public function evaluateSymbol($width, $frame)
         {
@@ -2695,18 +2719,18 @@
             for($y=0; $y<$width; $y++) {
                 $head = 0;
                 $this->runLength[0] = 1;
-                
+
                 $frameY = $frame[$y];
-                
+
                 if ($y>0)
                     $frameYM = $frame[$y-1];
-                
+
                 for($x=0; $x<$width; $x++) {
                     if(($x > 0) && ($y > 0)) {
                         $b22 = ord($frameY[$x]) & ord($frameY[$x-1]) & ord($frameYM[$x]) & ord($frameYM[$x-1]);
                         $w22 = ord($frameY[$x]) | ord($frameY[$x-1]) | ord($frameYM[$x]) | ord($frameYM[$x-1]);
-                        
-                        if(($b22 | ($w22 ^ 1))&1) {                                                                     
+
+                        if(($b22 | ($w22 ^ 1))&1) {
                             $demerit += N2;
                         }
                     }
@@ -2723,14 +2747,14 @@
                         }
                     }
                 }
-    
+
                 $demerit += $this->calcN1N3($head+1);
             }
 
             for($x=0; $x<$width; $x++) {
                 $head = 0;
                 $this->runLength[0] = 1;
-                
+
                 for($y=0; $y<$width; $y++) {
                     if($y == 0 && (ord($frame[$y][$x]) & 1)) {
                         $this->runLength[0] = -1;
@@ -2745,36 +2769,36 @@
                         }
                     }
                 }
-            
+
                 $demerit += $this->calcN1N3($head+1);
             }
 
             return $demerit;
         }
-        
-        
+
+
         //----------------------------------------------------------------------
         public function mask($width, $frame, $level)
         {
             $minDemerit = PHP_INT_MAX;
             $bestMaskNum = 0;
             $bestMask = array();
-            
+
             $checked_masks = array(0,1,2,3,4,5,6,7);
-            
+
             if (QR_FIND_FROM_RANDOM !== false) {
-            
+
                 $howManuOut = 8-(QR_FIND_FROM_RANDOM % 9);
                 for ($i = 0; $i <  $howManuOut; $i++) {
                     $remPos = rand (0, count($checked_masks)-1);
                     unset($checked_masks[$remPos]);
                     $checked_masks = array_values($checked_masks);
                 }
-            
+
             }
-            
+
             $bestMask = $frame;
-             
+
             foreach($checked_masks as $i) {
                 $mask = array_fill(0, $width, str_repeat("\0", $width));
 
@@ -2785,17 +2809,17 @@
                 $blacks  = (int)(100 * $blacks / ($width * $width));
                 $demerit = (int)((int)(abs($blacks - 50) / 5) * N4);
                 $demerit += $this->evaluateSymbol($width, $mask);
-                
+
                 if($demerit < $minDemerit) {
                     $minDemerit = $demerit;
                     $bestMask = $mask;
                     $bestMaskNum = $i;
                 }
             }
-            
+
             return $bestMask;
         }
-        
+
         //----------------------------------------------------------------------
     }
 
@@ -3051,7 +3075,7 @@
         //----------------------------------------------------------------------
         public function encodeString8bit($string, $version, $level)
         {
-            if(string == NULL) {
+            if($string == NULL) {
                 throw new Exception('empty string!');
                 return NULL;
             }
@@ -3088,9 +3112,9 @@
         }
         
         //----------------------------------------------------------------------
-        public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false) 
+        public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000) 
         {
-            $enc = QRencode::factory($level, $size, $margin);
+            $enc = QRencode::factory($level, $size, $margin, $back_color, $fore_color);
             return $enc->encodePNG($text, $outfile, $saveandprint=false);
         }
 
@@ -3099,6 +3123,20 @@
         {
             $enc = QRencode::factory($level, $size, $margin);
             return $enc->encode($text, $outfile);
+        }
+        
+        //----------------------------------------------------------------------
+        public static function eps($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000, $cmyk = false) 
+        {
+            $enc = QRencode::factory($level, $size, $margin, $back_color, $fore_color, $cmyk);
+            return $enc->encodeEPS($text, $outfile, $saveandprint=false);
+        }
+        
+        //----------------------------------------------------------------------
+        public static function svg($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000)
+        {
+            $enc = QRencode::factory($level, $size, $margin, $back_color, $fore_color);
+            return $enc->encodeSVG($text, $outfile, $saveandprint=false);
         }
 
         //----------------------------------------------------------------------
@@ -3209,6 +3247,8 @@
         public $version = 0;
         public $size = 3;
         public $margin = 4;
+        public $back_color = 0xFFFFFF;
+        public $fore_color = 0x000000;
         
         public $structured = 0; // not supported yet
         
@@ -3216,11 +3256,14 @@
         public $hint = QR_MODE_8;
         
         //----------------------------------------------------------------------
-        public static function factory($level = QR_ECLEVEL_L, $size = 3, $margin = 4)
+        public static function factory($level = QR_ECLEVEL_L, $size = 3, $margin = 4, $back_color = 0xFFFFFF, $fore_color = 0x000000, $cmyk = false)
         {
             $enc = new QRencode();
             $enc->size = $size;
             $enc->margin = $margin;
+            $enc->fore_color = $fore_color;
+            $enc->back_color = $back_color;
+            $enc->cmyk = $cmyk;
             
             switch ($level.'') {
                 case '0':
@@ -3299,7 +3342,55 @@
                 
                 $maxSize = (int)(QR_PNG_MAXIMUM_SIZE / (count($tab)+2*$this->margin));
                 
-                QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint);
+                QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint, $this->back_color, $this->fore_color);
+            
+            } catch (Exception $e) {
+            
+                QRtools::log($outfile, $e->getMessage());
+            
+            }
+        }
+        
+        //----------------------------------------------------------------------
+        public function encodeEPS($intext, $outfile = false,$saveandprint=false) 
+        {
+            try {
+            
+                ob_start();
+                $tab = $this->encode($intext);
+                $err = ob_get_contents();
+                ob_end_clean();
+                
+                if ($err != '')
+                    QRtools::log($outfile, $err);
+                
+                $maxSize = (int)(QR_PNG_MAXIMUM_SIZE / (count($tab)+2*$this->margin));
+                
+                QRvect::eps($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint, $this->back_color, $this->fore_color, $this->cmyk);
+            
+            } catch (Exception $e) {
+            
+                QRtools::log($outfile, $e->getMessage());
+            
+            }
+        }
+
+        //----------------------------------------------------------------------
+        public function encodeSVG($intext, $outfile = false,$saveandprint=false) 
+        {
+            try {
+            
+                ob_start();
+                $tab = $this->encode($intext);
+                $err = ob_get_contents();
+                ob_end_clean();
+                
+                if ($err != '')
+                    QRtools::log($outfile, $err);
+                
+                $maxSize = (int)(QR_PNG_MAXIMUM_SIZE / (count($tab)+2*$this->margin));
+
+                QRvect::svg($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint, $this->back_color, $this->fore_color);
             
             } catch (Exception $e) {
             
@@ -3308,5 +3399,227 @@
             }
         }
     }
+
+
+
+
+//---- qrvect.php -----------------------------
+
+
+
+
+/*
+ * PHP QR Code encoder
+ *
+ * Image output of code using GD2
+ *
+ * PHP QR Code is distributed under LGPL 3
+ * Copyright (C) 2010 Dominik Dzienia <deltalab at poczta dot fm>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+ 
+    define('QR_VECT', true);
+
+    class QRvect {
+    
+        //----------------------------------------------------------------------
+        public static function eps($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE, $back_color = 0xFFFFFF, $fore_color = 0x000000, $cmyk = false) 
+        {
+            $vect = self::vectEPS($frame, $pixelPerPoint, $outerFrame, $back_color, $fore_color, $cmyk);
+            
+            if ($filename === false) {
+                header("Content-Type: application/postscript");
+                header('Content-Disposition: filename="qrcode.eps"');
+                echo $vect;
+            } else {
+                if($saveandprint===TRUE){
+                    QRtools::save($vect, $filename);
+                    header("Content-Type: application/postscript");
+                    header('Content-Disposition: filename="qrcode.eps"');
+                    echo $vect;
+                }else{
+                    QRtools::save($vect, $filename);
+                }
+            }
+        }
+        
+    
+        //----------------------------------------------------------------------
+        private static function vectEPS($frame, $pixelPerPoint = 4, $outerFrame = 4, $back_color = 0xFFFFFF, $fore_color = 0x000000, $cmyk = false) 
+        {
+            $h = count($frame);
+            $w = strlen($frame[0]);
+            
+            $imgW = $w + 2*$outerFrame;
+            $imgH = $h + 2*$outerFrame;
+            
+            if ($cmyk)
+            {
+                // convert color value into decimal eps format
+                $c = round((($fore_color & 0xFF000000) >> 16) / 255, 5);
+                $m = round((($fore_color & 0x00FF0000) >> 16) / 255, 5);
+                $y = round((($fore_color & 0x0000FF00) >> 8) / 255, 5);
+                $k = round(($fore_color & 0x000000FF) / 255, 5);
+                $fore_color_string = $c.' '.$m.' '.$y.' '.$k.' setcmykcolor'."\n";
+
+                // convert color value into decimal eps format
+                $c = round((($back_color & 0xFF000000) >> 16) / 255, 5);
+                $m = round((($back_color & 0x00FF0000) >> 16) / 255, 5);
+                $y = round((($back_color & 0x0000FF00) >> 8) / 255, 5);
+                $k = round(($back_color & 0x000000FF) / 255, 5);
+                $back_color_string = $c.' '.$m.' '.$y.' '.$k.' setcmykcolor'."\n";
+            }
+            else
+            {
+                // convert a hexadecimal color code into decimal eps format (green = 0 1 0, blue = 0 0 1, ...)
+                $r = round((($fore_color & 0xFF0000) >> 16) / 255, 5);
+                $b = round((($fore_color & 0x00FF00) >> 8) / 255, 5);
+                $g = round(($fore_color & 0x0000FF) / 255, 5);
+                $fore_color_string = $r.' '.$b.' '.$g.' setrgbcolor'."\n";
+
+                // convert a hexadecimal color code into decimal eps format (green = 0 1 0, blue = 0 0 1, ...)
+                $r = round((($back_color & 0xFF0000) >> 16) / 255, 5);
+                $b = round((($back_color & 0x00FF00) >> 8) / 255, 5);
+                $g = round(($back_color & 0x0000FF) / 255, 5);
+                $back_color_string = $r.' '.$b.' '.$g.' setrgbcolor'."\n";
+            }
+            
+            $output = 
+            '%!PS-Adobe EPSF-3.0'."\n".
+            '%%Creator: PHPQrcodeLib'."\n".
+            '%%Title: QRcode'."\n".
+            '%%CreationDate: '.date('Y-m-d')."\n".
+            '%%DocumentData: Clean7Bit'."\n".
+            '%%LanguageLevel: 2'."\n".
+            '%%Pages: 1'."\n".
+            '%%BoundingBox: 0 0 '.$imgW * $pixelPerPoint.' '.$imgH * $pixelPerPoint."\n";
+            
+            // set the scale
+            $output .= $pixelPerPoint.' '.$pixelPerPoint.' scale'."\n";
+            // position the center of the coordinate system
+            
+            $output .= $outerFrame.' '.$outerFrame.' translate'."\n";
+           
+           
+            
+            
+            // redefine the 'rectfill' operator to shorten the syntax
+            $output .= '/F { rectfill } def'."\n";
+            
+            // set the symbol color
+            $output .= $back_color_string;
+            $output .= '-'.$outerFrame.' -'.$outerFrame.' '.($w + 2*$outerFrame).' '.($h + 2*$outerFrame).' F'."\n";
+            
+            
+            // set the symbol color
+            $output .= $fore_color_string;
+
+            // Convert the matrix into pixels
+
+            for($i=0; $i<$h; $i++) {
+                for($j=0; $j<$w; $j++) {
+                    if( $frame[$i][$j] == '1') {
+                        $y = $h - 1 - $i;
+                        $x = $j;
+                        $output .= $x.' '.$y.' 1 1 F'."\n";
+                    }
+                }
+            }
+            
+            
+            $output .='%%EOF';
+            
+            return $output;
+        }
+        
+        //----------------------------------------------------------------------
+        public static function svg($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE, $back_color, $fore_color) 
+        {
+            $vect = self::vectSVG($frame, $pixelPerPoint, $outerFrame, $back_color, $fore_color);
+            
+            if ($filename === false) {
+                header("Content-Type: image/svg+xml");
+                //header('Content-Disposition: attachment, filename="qrcode.svg"');
+                echo $vect;
+            } else {
+                if($saveandprint===TRUE){
+                    QRtools::save($vect, $filename);
+                    header("Content-Type: image/svg+xml");
+                    //header('Content-Disposition: filename="'.$filename.'"');
+                    echo $vect;
+                }else{
+                    QRtools::save($vect, $filename);
+                }
+            }
+        }
+        
+    
+        //----------------------------------------------------------------------
+        private static function vectSVG($frame, $pixelPerPoint = 4, $outerFrame = 4, $back_color = 0xFFFFFF, $fore_color = 0x000000) 
+        {
+            $h = count($frame);
+            $w = strlen($frame[0]);
+            
+            $imgW = $w + 2*$outerFrame;
+            $imgH = $h + 2*$outerFrame;
+            
+            
+            $output = 
+            '<?xml version="1.0" encoding="utf-8"?>'."\n".
+            '<svg version="1.1" baseProfile="full"  width="'.$imgW * $pixelPerPoint.'" height="'.$imgH * $pixelPerPoint.'" viewBox="0 0 '.$imgW * $pixelPerPoint.' '.$imgH * $pixelPerPoint.'"
+             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">'."\n".
+            '<desc></desc>'."\n";
+
+            $output =
+            '<?xml version="1.0" encoding="utf-8"?>'."\n".
+            '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">'."\n".
+            '<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" width="'.$imgW * $pixelPerPoint.'" height="'.$imgH * $pixelPerPoint.'" viewBox="0 0 '.$imgW * $pixelPerPoint.' '.$imgH * $pixelPerPoint.'">'."\n".
+            '<desc></desc>'."\n";
+                
+            if(!empty($back_color)) {
+                $backgroundcolor = str_pad(dechex($back_color), 6, "0", STR_PAD_LEFT);
+                $output .= '<rect width="'.$imgW * $pixelPerPoint.'" height="'.$imgH * $pixelPerPoint.'" fill="#'.$backgroundcolor.'" cx="0" cy="0" />'."\n";
+            }
+                
+            $output .= 
+            '<defs>'."\n".
+            '<rect id="p" width="'.$pixelPerPoint.'" height="'.$pixelPerPoint.'" />'."\n".
+            '</defs>'."\n".
+            '<g fill="#'.str_pad(dechex($fore_color), 6, "0", STR_PAD_LEFT).'">'."\n";
+                
+                
+            // Convert the matrix into pixels
+
+            for($i=0; $i<$h; $i++) {
+                for($j=0; $j<$w; $j++) {
+                    if( $frame[$i][$j] == '1') {
+                        $y = ($i + $outerFrame) * $pixelPerPoint;
+                        $x = ($j + $outerFrame) * $pixelPerPoint;
+                        $output .= '<use x="'.$x.'" y="'.$y.'" xlink:href="#p" />'."\n";
+                    }
+                }
+            }
+            $output .= 
+            '</g>'."\n".
+            '</svg>';
+            
+            return $output;
+        }
+    }
+    
+    
 
 
