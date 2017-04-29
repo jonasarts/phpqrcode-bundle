@@ -13,9 +13,10 @@ All the installation instructions are located in the [documentation](https://git
 License
 -------
 
-This bundle is under the MIT license. See the complete license in the bundle:
+This bundle is under the MIT license. See the complete license in the bundle.
 
-[LICENSE](https://github.com/jonasarts/phpqrcode-bundle/LICENSE)
+The most recent version:
+[LICENSE](https://github.com/jonasarts/phpqrcode-bundle/blob/master/LICENSE)
 
 This Bundle uses the [t0k4rt/phpqrcode](https://github.com/t0k4rt/phpqrcode) library
 

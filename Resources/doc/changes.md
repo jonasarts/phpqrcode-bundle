@@ -1,6 +1,11 @@
 CHANGE LOG
 ==========
 
+V 2.0.1
+-------
+
+- Fixed psr-4 config
+
 V 2.0.0
 -------
 
