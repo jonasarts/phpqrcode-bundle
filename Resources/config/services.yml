@@ -1,7 +1,10 @@
 parameters:
-    jonasarts.phpqrcode.class: jonasarts\Bundle\PHPQRCodeBundle\Services\PHPQRCode
+    jonasarts.phpqrcode.class: jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode
 
 services:
     phpqrcode:
         class: "%jonasarts.phpqrcode.class%"
         arguments: []
+        public: true
+
+    jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode: ~

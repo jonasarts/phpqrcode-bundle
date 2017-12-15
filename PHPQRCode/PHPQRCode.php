@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace jonasarts\Bundle\PHPQRCodeBundle\Services;
+namespace jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
