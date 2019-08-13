@@ -11,16 +11,16 @@
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * @Route("/qr")
  */
-class PHPQRCodeController extends Controller
+class PHPQRCodeController extends AbstractController
 {
     /**
      * @var PHPQRCode $service
@@ -29,7 +29,7 @@ class PHPQRCodeController extends Controller
 
     /**
      * Get QR Code service
-     * 
+     *
      * @return PHPQRCode
      */
     private function getQR()
@@ -50,12 +50,12 @@ class PHPQRCodeController extends Controller
     }
 
     /**
-     * 
+     *
      * @param string  $text
      * @param string  $level
      * @param int $size
      * @param int $margin
-     * 
+     *
      * @return Response
      */
     private function getQRCodePNG($text, $level, $size, $margin)
@@ -67,12 +67,12 @@ class PHPQRCodeController extends Controller
     }
 
     /**
-     * 
+     *
      * @param string  $text
      * @param string  $level
      * @param int $size
      * @param int $margin
-     * 
+     *
      * @return Response
      */
     private function getQRCodeSVG($text, $level, $size, $margin)
@@ -83,9 +83,9 @@ class PHPQRCodeController extends Controller
     }
 
     /**
-     * 
+     *
      * @Route("/png/{level}/{size}/{margin}", name="qrcode_png")
-     * 
+     *
      * @return Response
      */
     public function getQRCodePNGAction(Request $request, $level, $size, $margin)
@@ -99,14 +99,14 @@ class PHPQRCodeController extends Controller
         if (trim($text) == '') {
             $text = 'EMPTY';
         }
-        
+
         return $this->getQRCodePNG($text, $level, $size, $margin);
     }
 
     /**
-     * 
+     *
      * @Route("/png", name="qrcode_png_default")
-     * 
+     *
      * @return Response
      */
     public function getQRCodePNGwDefaultsAction(Request $request)
@@ -129,9 +129,9 @@ class PHPQRCodeController extends Controller
     }
 
     /**
-     * 
+     *
      * @Route("/svg/{level}/{size}/{margin}", name="qrcode_svg")
-     * 
+     *
      * @return Response
      */
     public function getQRCodeSVGAction(Request $request, $level, $size, $margin)
@@ -145,14 +145,14 @@ class PHPQRCodeController extends Controller
         if (trim($text) == '') {
             $text = 'EMPTY';
         }
-        
+
         return $this->getQRCodeSVG($text, $level, $size, $margin);
     }
 
     /**
-     * 
+     *
      * @Route("/svg", name="qrcode_svg_default")
-     * 
+     *
      * @return Response
      */
     public function getQRCodeSVGwDefaultsAction(Request $request)

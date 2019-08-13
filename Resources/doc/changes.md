@@ -1,6 +1,11 @@
 CHANGE LOG
 ==========
 
+V 4.0.2
+-------
+
+- Update for Symfony 4.3 compatibility
+
 V 4.0.1
 -------
 
