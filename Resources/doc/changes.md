@@ -1,6 +1,12 @@
 CHANGE LOG
 ==========
 
+V 5.0.0
+-------
+
+- Update for Symfony 5.* compatibility
+- Updated docs & examples for Symfony 4|5 
+
 V 4.0.2
 -------
 

@@ -3,33 +3,33 @@ Using the bundle
 
 The service class provides methods to generate the different QR Code images.
 
-Retrieve the service like any other symfony service:
+Use dependency injection to retrieve the service within a controller:
 
 ```php
-    $qrc = $this->get('phpqrcode');
+    function someAction(PHPQRCode $qrc)
+    {
+        // use $qrc ...
+        return $qrc->generatePNG("test", 'Q', 4, 3);
+    }
 ```
 
-In the php code examples, ``$this`` referes to a controller.
-
 ```php
-    // get the service
-    $qrc = $this->get('phpqrcode');
+    $qrc = new PhpQrCode();
 
     // output a custom png
-    $qrc->getQRCodePNG($text, 'Q', 4, 3);
+    $response = $qrc->generatePNG("custom test", 'Q', 4, 3);
 
-    // exit php
-    exit(0);
+    return $response;
 ```
 
-As pure HTML tags
+As pure HTML tags (if routes are registered)
 ```html
     <img src='/qr/png?text=Test'>
 
     <img src='/qr/svg?text=Test'>
 ```
 
-Use routes for Twig
+Use routes with Twig
 ```twig
     <img src="{{ path('qrcode_png_default', { 'text': 'Test' }) }}">
 

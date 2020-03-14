@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the PHP QR Code bundle package.
  *
@@ -19,7 +21,7 @@ require_once __DIR__ . '/../lib/qrlib.php';
 /**
  * PHP QR Code Service
  */
-class PHPQRCode
+class PHPQRCode implements PHPQRCodeInterface
 {
     /**
      * Constructor
@@ -30,16 +32,16 @@ class PHPQRCode
     }
 
     /**
-     * 
+     *
      * @param string $text
-     * - 
+     * -
      * @param string $level
      * @param int $size
      * @param int $margin
      * @param bool $saveandprint
      * @param hex $back_color
      * @param hex $fore_color
-     * 
+     *
      * QRcode params:
      * $text,
      * $outfile = false,
@@ -49,10 +51,10 @@ class PHPQRCode
      * $saveandprint = false
      * $back_color = 0xFFFFFF
      * $fore_color = 0x000000
-     * 
+     *
      * @return Response
      */
-    public function generatePNG($text, $level = 'L', $size = 3, $margin = 4, $saveandprint = false, $back_color = 0xFFFFFF, $fore_color = 0x000000)
+    public function generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, bool $saveandprint = false, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
     {
         // level = L M Q H
         switch ($level) {
@@ -71,7 +73,7 @@ class PHPQRCode
 
         // phpqrcode.php
         // QRcode
-        // public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000) 
+        // public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000)
 
         ob_start();
         \QRcode::png($text, false, $level, $size, $margin, $saveandprint, $back_color, $fore_color);
@@ -91,16 +93,16 @@ class PHPQRCode
     }
 
     /**
-     * 
+     *
      * @param string $text
-     * - 
+     * -
      * @param string $level
      * @param int $size
      * @param int $margin
      * @param bool $saveandprint
      * @param hex $back_color
      * @param hex $fore_color
-     * 
+     *
      * QRCode params:
      * $text,
      * $level = QR_ECLEVEL_L,
@@ -109,10 +111,10 @@ class PHPQRCode
      * $saveandprint = false
      * $back_color = 0xFFFFFF
      * $fore_color = 0x000000
-     * 
+     *
      * @return Response
      */
-    public function generateSVG($text, $level = 'L', $size = 3, $margin = 4, $saveandprint = false, $back_color = 0xFFFFFF, $fore_color = 0x000000)
+    public function generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, bool $saveandprint = false, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
     {
         // level = L M Q H
         switch ($level) {
