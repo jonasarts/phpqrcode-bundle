@@ -25,13 +25,16 @@ jonasarts\Bundle\PHPQRCodeBundle\Controller\:
     tags: ['controller.service_arguments']
 ```
 
+You can now use `jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode` class.
+
 Register the routes:
 
+Add a routing configuration in `config/routes` directory:
+
 ```yaml
-#config/routing.yml or config/routes/annotations.yaml
+#config/routes/phpqrcode.yaml
 phpqrcode:
     resource: '@PHPQRCodeBundle/Controller/'
-    resource: '../vendor/jonasarts/phpqrcode-bundle/Controller'
     type: annotation
 ```
 

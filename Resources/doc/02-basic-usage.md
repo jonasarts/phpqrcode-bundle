@@ -14,7 +14,7 @@ Use dependency injection to retrieve the service within a controller:
 ```
 
 ```php
-    $qrc = new PhpQrCode();
+    $qrc = new \jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode();
 
     // output a custom png
     $response = $qrc->generatePNG("custom test", 'Q', 4, 3);
