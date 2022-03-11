@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the PHP QR Code bundle package.
  *
@@ -23,6 +25,7 @@ class PHPQRCodeExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        /* old
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -33,6 +36,11 @@ class PHPQRCodeExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        */
+
+        $configuration = new Configuration();
+
+        $config = $this->processConfiguration($configuration, $configs);
     }
 
     /**

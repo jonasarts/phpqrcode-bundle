@@ -16,7 +16,7 @@ namespace jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-require_once __DIR__ . '/../lib/qrlib.php';
+require_once __DIR__ . '/../../lib/qrlib.php';
 
 /**
  * PHP QR Code Service

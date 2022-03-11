@@ -1,11 +1,18 @@
 CHANGE LOG
 ==========
 
+V 6.0.0
+-------
+
+- Update for PHP 8.* compatibility
+- Update for Symfony 5.* compatibility
+- Release vor Symfony 6.x
+
 V 5.0.0
 -------
 
 - Update for Symfony 5.* compatibility
-- Updated docs & examples for Symfony 4|5 
+- Updated docs & examples for Symfony 4|5
 
 V 4.0.2
 -------

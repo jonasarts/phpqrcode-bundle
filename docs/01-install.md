@@ -18,10 +18,10 @@ Register the controller & services:
 ```yaml
 #config/services.yml
 jonasarts\Bundle\PHPQRCodeBundle\:
-    resource: '../vendor/jonasarts/phpqrcode-bundle/*'
-    exclude: '../vendor/jonasarts/phpqrcode-bundle/{DependencyInjection,lib,Tests}'
+    resource: '../vendor/jonasarts/phpqrcode-bundle/src/*'
+    exclude: '../vendor/jonasarts/phpqrcode-bundle/src/{DependencyInjection,lib,Tests}'
 jonasarts\Bundle\PHPQRCodeBundle\Controller\:
-    resource: '../vendor/jonasarts/phpqrcode-bundle/Controller'
+    resource: '../vendor/jonasarts/phpqrcode-bundle/src/Controller'
     tags: ['controller.service_arguments']
 ```
 

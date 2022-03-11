@@ -12,12 +12,19 @@
             "homepage": "http://www.jonasarts.com"
         }
     ],
+    "minimum-stability": "stable",
     "require": {
-        "php": ">=7.1",
-        "sensio/framework-extra-bundle": "^5.0|^6.0",
-        "symfony/framework-bundle": "^5.0"
+        "php": ">=7.2.5"
     },
     "autoload": {
-        "psr-4": { "jonasarts\\Bundle\\PHPQRCodeBundle\\": "" }
-    }
+        "psr-4": {
+            "jonasarts\\Bundle\\PHPQRCodeBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "jonasarts\\Bundle\\PHPQRCodeBundle\\Tests\\": "tests/"
+        }
+    },
+    "target-dir": "jonasarts/PHPQRCodeBundle"
 }
