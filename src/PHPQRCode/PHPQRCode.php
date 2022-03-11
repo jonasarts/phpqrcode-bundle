@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode;
 
+use chillerlan\QRCode\{QRCode, QROptions};
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-require_once __DIR__ . '/../../lib/qrlib.php';
+//require_once __DIR__ . '/../../lib/qrlib.php';
 
 /**
  * PHP QR Code Service
@@ -48,29 +49,44 @@ class PHPQRCode implements PHPQRCodeInterface
      * $level = QR_ECLEVEL_L,
      * $size = 3,
      * $margin = 4,
-     * $saveandprint = false
+     * -$saveandprint = false-
      * $back_color = 0xFFFFFF
      * $fore_color = 0x000000
      *
      * @return Response
      */
-    public function generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, bool $saveandprint = false, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
+    public function generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
     {
+        $options = [
+            'version'             => 7,
+	          'outputType'          => QRCode::OUTPUT_IMAGE_PNG,
+            'eccLevel'            => QRCode::ECC_L,
+            'scale'               => $size,
+            'addQuietzone'        => $margin > 0,
+            'imageBase64'         => false,
+	          'imageTransparent'    => false,
+        ];
+
         // level = L M Q H
         switch ($level) {
             case 'M':
-                $level = QR_ECLEVEL_M;
+                //$level = QR_ECLEVEL_M;
+                $options['eccLevel'] = QRCode::ECC_M;
                 break;
             case 'Q':
-                $level = QR_ECLEVEL_Q;
+                //$level = QR_ECLEVEL_Q;
+                $options['eccLevel'] = QRCode::ECC_Q;
                 break;
             case 'H':
-                $level = QR_ECLEVEL_H;
+                //$level = QR_ECLEVEL_H;
+                $options['eccLevel'] = QRCode::ECC_H;
                 break;
             default:
-                $level = QR_ECLEVEL_L;
+                //$level = QR_ECLEVEL_L;
+                $options['eccLevel'] = QRCode::ECC_L;
         }
 
+        /*
         // phpqrcode.php
         // QRcode
         // public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000)
@@ -78,6 +94,15 @@ class PHPQRCode implements PHPQRCodeInterface
         ob_start();
         \QRcode::png($text, false, $level, $size, $margin, $saveandprint, $back_color, $fore_color);
         $imageString = ob_get_clean();
+        */
+
+        // invoke a fresh QRCode instance
+        $qrcode = new QRCode(new QROptions($options));
+
+        // and dump the output
+        $imageString = $qrcode->render($text);
+
+        // return as a http response
 
         $response = new Response($imageString);
 
@@ -91,6 +116,12 @@ class PHPQRCode implements PHPQRCodeInterface
 
         return $response;
     }
+
+    // generateJPG
+    // generateGIF
+
+    // generateText
+    // generateJSON
 
     /**
      *
@@ -108,29 +139,45 @@ class PHPQRCode implements PHPQRCodeInterface
      * $level = QR_ECLEVEL_L,
      * $size = 3,
      * $margin = 4,
-     * $saveandprint = false
+     * -$saveandprint = false-
      * $back_color = 0xFFFFFF
      * $fore_color = 0x000000
      *
      * @return Response
      */
-    public function generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, bool $saveandprint = false, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
+    public function generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
     {
+        $options = [
+            'version'             => 7,
+            'outputType'          => QRCode::OUTPUT_MARKUP_SVG,
+            'eccLevel'            => QRCode::ECC_L,
+            'scale'               => $size,
+            'addQuietzone'        => $margin > 0,
+            'imageBase64'         => false,
+            //'imageTransparent'    => false,
+            'svgConnectPaths'     => true,
+        ];
+
         // level = L M Q H
         switch ($level) {
             case 'M':
-                $level = QR_ECLEVEL_M;
+                //$level = QR_ECLEVEL_M;
+                $options['eccLevel'] = QRCode::ECC_M;
                 break;
             case 'Q':
-                $level = QR_ECLEVEL_Q;
+                //$level = QR_ECLEVEL_Q;
+                $options['eccLevel'] = QRCode::ECC_Q;
                 break;
             case 'H':
-                $level = QR_ECLEVEL_H;
+                //$level = QR_ECLEVEL_H;
+                $options['eccLevel'] = QRCode::ECC_H;
                 break;
             default:
-                $level = QR_ECLEVEL_L;
+                //$level = QR_ECLEVEL_L;
+                $options['eccLevel'] = QRCode::ECC_L;
         }
 
+        /*
         // phpqrcode.php
         // QRcode
         // public static function svg($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false, $back_color = 0xFFFFFF, $fore_color = 0x000000)
@@ -138,6 +185,15 @@ class PHPQRCode implements PHPQRCodeInterface
         ob_start();
         \QRcode::svg($text, false, $level, $size, $margin, $saveandprint, $back_color, $fore_color);
         $imageString = ob_get_clean();
+        */
+
+        // invoke a fresh QRCode instance
+        $qrcode = new QRCode(new QROptions($options));
+
+        // and dump the output
+        $imageString = $qrcode->render($text);
+
+        // return as a http response
 
         $response = new Response($imageString);
 
