@@ -26,6 +26,5 @@
         "psr-4": {
             "jonasarts\\Bundle\\PHPQRCodeBundle\\Tests\\": "tests/"
         }
-    },
-    "target-dir": "jonasarts/PHPQRCodeBundle"
+    }
 }

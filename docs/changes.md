@@ -4,10 +4,14 @@ CHANGE LOG
 V 6.0.0
 -------
 
+- Removed old QR Code lib
+- Moved to chillerlan/php-qrcode for QR Code generation
 - Update for PHP 8.* compatibility
 - Update for Symfony 5.* compatibility
 - Test-Release for Symfony 6.x
 - Not ready for production
+- Breaking changes in the PHPQRCodeInterface methods!!!
+  (bool $saveandprint = false was removed)
 
 V 5.0.0
 -------

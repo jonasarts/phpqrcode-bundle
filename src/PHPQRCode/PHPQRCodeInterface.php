@@ -17,6 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface PHPQRCodeInterface
 {
-    function generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, bool $saveandprint = false, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response;
-    function generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, bool $saveandprint = false, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response;
+    function generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response;
+    function generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response;
 }
