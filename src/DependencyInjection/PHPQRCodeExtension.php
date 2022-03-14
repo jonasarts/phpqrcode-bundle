@@ -41,12 +41,14 @@ class PHPQRCodeExtension extends Extension
         $configuration = new Configuration();
 
         $config = $this->processConfiguration($configuration, $configs);
-        
+
         // apply config default
         $container->setParameter('phpqrcode.default.level', $config['default']['level']);
         $container->setParameter('phpqrcode.default.size', $config['default']['size']);
         $container->setParameter('phpqrcode.default.margin', $config['default']['margin']);
 
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
     }
 
     /**

@@ -1,0 +1,3 @@
+phpqrcode:
+    resource: '@PHPQRCodeBundle/src/Controller/'
+    type: annotation
