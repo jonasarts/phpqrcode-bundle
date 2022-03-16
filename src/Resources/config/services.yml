@@ -1,2 +1,11 @@
 services:
     jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode: ~
+
+    #jonasarts\Bundle\PHPQRCodeBundle\Controller\:
+    #    resource: '../../Controller'
+    #    tags: [ 'controller.service_arguments' ]
+
+    jonasarts\Bundle\PHPQRCodeBundle\Controller\PHPQRCodeController:
+        public: true
+        calls:
+            - setContainer: ['@service_container']

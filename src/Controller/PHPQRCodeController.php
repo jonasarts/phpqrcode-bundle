@@ -32,11 +32,11 @@ class PHPQRCodeController extends AbstractController
     /**
      * Constructor
      */
-    function __construct(PHPQRCode $qrc)
+    function __construct()
     {
          //parent::__construct();
 
-         $this->qr = $qrc;
+         $this->qr = new PHPQRCode();
     }
 
     /**
