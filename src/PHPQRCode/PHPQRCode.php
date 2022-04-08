@@ -58,7 +58,7 @@ class PHPQRCode implements PHPQRCodeInterface
     public function generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
     {
         $options = [
-            'version'             => 7,
+            'version'             => QRCode::VERSION_AUTO, // to avoid code length issues
 	          'outputType'          => QRCode::OUTPUT_IMAGE_PNG,
             'eccLevel'            => QRCode::ECC_L,
             'scale'               => $size,
@@ -148,7 +148,7 @@ class PHPQRCode implements PHPQRCodeInterface
     public function generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
     {
         $options = [
-            'version'             => 7,
+            'version'             => QRCode::VERSION_AUTO, // to avoid code length issues
             'outputType'          => QRCode::OUTPUT_MARKUP_SVG,
             'eccLevel'            => QRCode::ECC_L,
             'scale'               => $size,

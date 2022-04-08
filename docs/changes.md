@@ -4,6 +4,7 @@ CHANGE LOG
 V 6.0.5
 -------
 
+- Changed QRCode Version from 7 to auto to avoid code length issues
 - Renamed files from .yml to .yaml
 
 V 6.0.0
