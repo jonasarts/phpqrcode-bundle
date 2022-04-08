@@ -48,7 +48,7 @@ class PHPQRCodeExtension extends Extension
         $container->setParameter('phpqrcode.default.margin', $config['default']['margin']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader->load('services.yaml');
 
         $this->addAnnotatedClassesToCompile([
             // you can define the fully qualified class names...
