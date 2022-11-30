@@ -18,6 +18,6 @@ This bundle is under the MIT license. See the complete license in the bundle.
 The most recent version:
 [LICENSE](https://github.com/jonasarts/phpqrcode-bundle/blob/master/LICENSE)
 
-This Bundle uses the [t0k4rt/phpqrcode](https://github.com/t0k4rt/phpqrcode) library
+This Bundle uses the [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode) library
 
 The PHP QR Code class is under the GNU Lesser General Public License version 3. [PHP QR Code Website](http://phpqrcode.sourceforge.net)
