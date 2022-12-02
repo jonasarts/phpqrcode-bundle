@@ -6,7 +6,7 @@ Setting up the bundle
 Execute this console command in your project:
 
 ``` bash
-$ composer require jonasarts/phpqrcode-bundle
+composer require jonasarts/phpqrcode-bundle
 ```
 
 ## Enable the bundle
