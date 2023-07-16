@@ -8,7 +8,7 @@ This bundle provides a simplified access to the PHP QR Code class for the Symfon
 Installation
 ------------
 
-All the installation instructions are located in the [documentation](https://github.com/jonasarts/phpqrcode-bundle/blob/master/Resources/doc/index.md).
+All the installation instructions are located in the [documentation](https://github.com/jonasarts/phpqrcode-bundle/blob/master/docs/index.md).
 
 License
 -------
