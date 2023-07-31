@@ -39,9 +39,8 @@ class PHPQRCode implements PHPQRCodeInterface
      * @param string $level
      * @param int $size
      * @param int $margin
-     * @param bool $saveandprint
-     * @param hex $back_color
-     * @param hex $fore_color
+     * @param int $back_color
+     * @param int $fore_color
      *
      * QRcode params:
      * $text,
@@ -130,9 +129,8 @@ class PHPQRCode implements PHPQRCodeInterface
      * @param string $level
      * @param int $size
      * @param int $margin
-     * @param bool $saveandprint
-     * @param hex $back_color
-     * @param hex $fore_color
+     * @param int $back_color
+     * @param int $fore_color
      *
      * QRCode params:
      * $text,

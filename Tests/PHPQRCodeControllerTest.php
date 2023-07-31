@@ -19,8 +19,8 @@ use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCodeController;
 
 class PHPQRCodeControllerTest extends WebTestCase
 {
-    private $user = 'test';
-    private $pass = 'te$t';
+    private string $user = 'test';
+    private string $pass = 'te$t';
 
     /**
      * @runInSeparateProcess
