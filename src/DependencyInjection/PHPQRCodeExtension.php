@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class PHPQRCodeExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         /* old
         $configuration = new Configuration();

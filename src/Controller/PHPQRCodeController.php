@@ -25,9 +25,9 @@ use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode;
 class PHPQRCodeController extends AbstractController
 {
     /**
-     * @var PHPQRCode
+     * @var PHPQRCode|null
      */
-    private $qr = null;
+    private ?PHPQRCode $qr = null;
 
     /**
      * Constructor
@@ -88,7 +88,7 @@ class PHPQRCodeController extends AbstractController
      *
      * @return Response
      */
-    public function testAction()
+    public function testAction(): Response
     {
         return $this->getQR()->generatePNG("test", 'Q', 4, 3);
     }
@@ -97,9 +97,13 @@ class PHPQRCodeController extends AbstractController
      *
      * @Route("/png/{level}/{size}/{margin}", name="qrcode_png")
      *
+     * @param Request $request
+     * @param string $level
+     * @param int $size
+     * @param int $margin
      * @return Response
      */
-    public function getQRCodePNGAction(Request $request, string $level, int $size, int $margin)
+    public function getQRCodePNGAction(Request $request, string $level, int $size, int $margin): Response
     {
         $text = 'getQRCodePNGAction has no text content';
 
@@ -118,9 +122,10 @@ class PHPQRCodeController extends AbstractController
      *
      * @Route("/png", name="qrcode_png_default")
      *
+     * @param Request $request
      * @return Response
      */
-    public function getQRCodePNGwDefaultsAction(Request $request)
+    public function getQRCodePNGwDefaultsAction(Request $request): Response
     {
         $text = 'getQRCodePNGwDefaultsAction has no text content';
 
@@ -143,9 +148,13 @@ class PHPQRCodeController extends AbstractController
      *
      * @Route("/svg/{level}/{size}/{margin}", name="qrcode_svg")
      *
+     * @param Request $request
+     * @param string $level
+     * @param int $size
+     * @param int $margin
      * @return Response
      */
-    public function getQRCodeSVGAction(Request $request, string $level, int $size, int $margin)
+    public function getQRCodeSVGAction(Request $request, string $level, int $size, int $margin): Response
     {
         $text = 'getQRCodeSVGAction has no text content';
 
@@ -164,9 +173,10 @@ class PHPQRCodeController extends AbstractController
      *
      * @Route("/svg", name="qrcode_svg_default")
      *
+     * @param Request $request
      * @return Response
      */
-    public function getQRCodeSVGwDefaultsAction(Request $request)
+    public function getQRCodeSVGwDefaultsAction(Request $request): Response
     {
         $text = 'getQRCodeSVGwDefaultsAction has no text content';
 

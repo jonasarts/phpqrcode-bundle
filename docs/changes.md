@@ -1,6 +1,11 @@
 CHANGE LOG
 ==========
 
+V 6.3.1
+-------
+
+- Applied missing PHP 8.1 changes
+
 V 6.3.0
 -------
 
