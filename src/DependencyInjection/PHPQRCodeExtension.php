@@ -49,12 +49,6 @@ class PHPQRCodeExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
-
-        $this->addAnnotatedClassesToCompile([
-            // you can define the fully qualified class names...
-            'jonasarts\\Bundle\\PHPQRCodeBundle\\Controller\\PHPQRCodeController',
-            // ...
-      ]);
     }
 
     /**
