@@ -35,7 +35,7 @@ Add a routing configuration in `config/routes` directory:
 #config/routes/phpqrcode.yaml
 phpqrcode:
     resource: '@PHPQRCodeBundle/src/Controller/'
-    type: annotation
+    type: attribute
 ```
 
 or
