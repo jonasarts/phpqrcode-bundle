@@ -1,9 +1,10 @@
 CHANGE LOG
 ==========
 
-V 6.3.2
+V 6.4.5
 -------
 
+- Moved from annotations to attributes
 - Merged PR7
 - Minor code cleanup
 
