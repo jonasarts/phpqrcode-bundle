@@ -13,15 +13,17 @@ declare(strict_types=1);
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\Controller;
 
+use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode;
+//use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @Route("/qr")
  */
+#[Route('/qr')]
 class PHPQRCodeController extends AbstractController
 {
     /**
@@ -88,6 +90,7 @@ class PHPQRCodeController extends AbstractController
      *
      * @return Response
      */
+    #[Route('/test', name: 'qrcode_test')]
     public function testAction(): Response
     {
         return $this->getQR()->generatePNG("test", 'Q', 4, 3);
@@ -103,6 +106,7 @@ class PHPQRCodeController extends AbstractController
      * @param int $margin
      * @return Response
      */
+    #[Route('/png/{level}/{size}/{margin}', name: 'qrcode_png')]
     public function getQRCodePNGAction(Request $request, string $level, int $size, int $margin): Response
     {
         $text = 'getQRCodePNGAction has no text content';
@@ -125,6 +129,7 @@ class PHPQRCodeController extends AbstractController
      * @param Request $request
      * @return Response
      */
+    #[Route('/png', name: 'qrcode_png_default')]
     public function getQRCodePNGwDefaultsAction(Request $request): Response
     {
         $text = 'getQRCodePNGwDefaultsAction has no text content';
@@ -154,6 +159,7 @@ class PHPQRCodeController extends AbstractController
      * @param int $margin
      * @return Response
      */
+    #[Route('/svg/{level}/{size}/{margin}', name: 'qrcode_svg')]
     public function getQRCodeSVGAction(Request $request, string $level, int $size, int $margin): Response
     {
         $text = 'getQRCodeSVGAction has no text content';
@@ -176,6 +182,7 @@ class PHPQRCodeController extends AbstractController
      * @param Request $request
      * @return Response
      */
+    #[Route('/svg', name: 'qrcode_svg_default')]
     public function getQRCodeSVGwDefaultsAction(Request $request): Response
     {
         $text = 'getQRCodeSVGwDefaultsAction has no text content';
