@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\Tests;
 
+use jonasarts\Bundle\PHPQRCodeBundle\Controller\PHPQRCodeController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCodeController;
 
 class PHPQRCodeControllerTest extends WebTestCase
 {
