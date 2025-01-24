@@ -1,6 +1,12 @@
 CHANGE LOG
 ==========
 
+V 6.3.2
+-------
+
+- Merged PR7
+- Minor code cleanup
+
 V 6.3.1
 -------
 
