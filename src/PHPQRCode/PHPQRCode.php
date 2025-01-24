@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode;
 
-use chillerlan\QRCode\{QRCode, QROptions};
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-
-//require_once __DIR__ . '/../../lib/qrlib.php';
 
 /**
  * PHP QR Code Service
@@ -48,7 +47,7 @@ class PHPQRCode implements PHPQRCodeInterface
      * $level = QR_ECLEVEL_L,
      * $size = 3,
      * $margin = 4,
-     * -$saveandprint = false-
+     * - $saveandprint = false -
      * $back_color = 0xFFFFFF
      * $fore_color = 0x000000
      *
@@ -58,12 +57,12 @@ class PHPQRCode implements PHPQRCodeInterface
     {
         $options = [
             'version'             => QRCode::VERSION_AUTO, // to avoid code length issues
-	          'outputType'          => QRCode::OUTPUT_IMAGE_PNG,
+	        'outputType'          => QRCode::OUTPUT_IMAGE_PNG,
             'eccLevel'            => QRCode::ECC_L,
             'scale'               => $size,
             'addQuietzone'        => $margin > 0,
             'imageBase64'         => false,
-	          'imageTransparent'    => false,
+	        'imageTransparent'    => false,
         ];
 
         // level = L M Q H
@@ -137,7 +136,7 @@ class PHPQRCode implements PHPQRCodeInterface
      * $level = QR_ECLEVEL_L,
      * $size = 3,
      * $margin = 4,
-     * -$saveandprint = false-
+     * - $saveandprint = false -
      * $back_color = 0xFFFFFF
      * $fore_color = 0x000000
      *
