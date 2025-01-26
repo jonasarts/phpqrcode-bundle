@@ -1,6 +1,12 @@
 CHANGE LOG
 ==========
 
+V 7.0.0
+-------
+
+- Moving to Symfony 7
+- Requires PHP 8.2
+
 V 6.4.5
 -------
 
