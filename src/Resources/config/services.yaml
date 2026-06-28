@@ -1,11 +1,20 @@
 services:
+    # the QR code service
     jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode: ~
 
-    #jonasarts\Bundle\PHPQRCodeBundle\Controller\:
-    #    resource: '../../Controller'
-    #    tags: [ 'controller.service_arguments' ]
+    # type-hint the interface to receive the service
+    jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCodeInterface:
+        alias: jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode
 
+    # the controller (autowired, registered as a service for argument resolution)
     jonasarts\Bundle\PHPQRCodeBundle\Controller\PHPQRCodeController:
+        autowire: true
+        autoconfigure: true
         public: true
-        calls:
-            - setContainer: ['@service_container']
+        arguments:
+            $qr: '@jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCodeInterface'
+            $defaultLevel: '%phpqrcode.default.level%'
+            $defaultSize: '%phpqrcode.default.size%'
+            $defaultMargin: '%phpqrcode.default.margin%'
+            $maxTextLength: '%phpqrcode.limits.max_text_length%'
+            $accessRole: '%phpqrcode.access.role%'

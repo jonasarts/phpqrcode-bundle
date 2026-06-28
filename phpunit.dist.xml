@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         defaultTestSuite="unit">
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <server name="APP_ENV" value="test" force="true"/>
+        <server name="SHELL_VERBOSITY" value="-1"/>
+        <server name="KERNEL_CLASS" value="jonasarts\Bundle\PHPQRCodeBundle\Tests\TestKernel"/>
+    </php>
+
+    <testsuites>
+        <!-- Pure unit tests: no Kernel, render + decode the QR code directly -->
+        <testsuite name="unit">
+            <directory>tests/PHPQRCode</directory>
+            <directory>tests/DependencyInjection</directory>
+        </testsuite>
+        <!-- Integration tests: boot the TestKernel and exercise the HTTP routes -->
+        <testsuite name="integration">
+            <file>tests/PHPQRCodeControllerTest.php</file>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+</phpunit>

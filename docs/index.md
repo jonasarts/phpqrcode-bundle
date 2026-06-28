@@ -10,3 +10,9 @@ Usage
 -----
 
 * [Using the bundle](02-basic-usage.md)
+
+Development
+-----------
+
+* [Testing the bundle](test.md)
+* [Change log](../CHANGELOG.md)

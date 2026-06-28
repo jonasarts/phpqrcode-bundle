@@ -3,23 +3,34 @@ Using the bundle
 
 The service class provides methods to generate the different QR Code images.
 
-Use dependency injection to retrieve the service within a controller:
+Use dependency injection (type-hint the interface) to retrieve the service
+within a controller:
 
 ```php
-    function someAction(PHPQRCode $qrc)
+    use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCodeInterface;
+
+    function someAction(PHPQRCodeInterface $qrc)
     {
         // use $qrc ...
         return $qrc->generatePNG("test", 'Q', 4, 3);
     }
 ```
 
-```php
-    $qrc = new \jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode();
+Both methods accept optional background and foreground colors as `0xRRGGBB`
+integers (these are now applied to the rendered code):
 
-    // output a custom png
-    $response = $qrc->generatePNG("custom test", 'Q', 4, 3);
+```php
+    // red foreground on a white background
+    $response = $qrc->generatePNG("custom test", 'Q', 4, 3, 0xFFFFFF, 0xFF0000);
 
     return $response;
+```
+
+Method signatures:
+
+```php
+    generatePNG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
+    generateSVG(string $text, string $level = 'L', int $size = 3, int $margin = 4, int $back_color = 0xFFFFFF, int $fore_color = 0x000000): Response
 ```
 
 As pure HTML tags (if routes are registered)

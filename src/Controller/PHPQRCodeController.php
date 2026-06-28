@@ -13,191 +13,121 @@ declare(strict_types=1);
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\Controller;
 
-use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCode;
+use jonasarts\Bundle\PHPQRCodeBundle\PHPQRCode\PHPQRCodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/qr")
- */
 #[Route('/qr')]
 class PHPQRCodeController extends AbstractController
 {
-    /**
-     * @var PHPQRCode|null
-     */
-    private ?PHPQRCode $qr = null;
-
-    /**
-     * Constructor
-     */
-    function __construct()
-    {
-         //parent::__construct();
-
-         $this->qr = new PHPQRCode();
+    public function __construct(
+        private readonly PHPQRCodeInterface $qr,
+        private readonly string $defaultLevel,
+        private readonly int $defaultSize,
+        private readonly int $defaultMargin,
+        private readonly int $maxTextLength,
+        private readonly ?string $accessRole = null,
+    ) {
     }
 
-    /**
-     * Get QR Code service
-     *
-     * @return PHPQRCode
-     */
-    private function getQR(): PHPQRCode
-    {
-        return $this->qr;
-    }
-
-    /**
-     *
-     * @param string  $text
-     * @param string  $level
-     * @param int $size
-     * @param int $margin
-     *
-     * @return Response
-     */
-    private function getQRCodePNG(string $text, string $level, int $size, int $margin): Response
-    {
-        //QRcode::png('PHP QR Code :)', 'test.png', QR_ECLEVEL_L, 4, 2);
-        //QRcode::png('Testing', false, 'Q', 4, 3);
-
-        return $this->getQR()->generatePNG($text, $level, $size, $margin);
-    }
-
-    /**
-     *
-     * @param string  $text
-     * @param string  $level
-     * @param int $size
-     * @param int $margin
-     *
-     * @return Response
-     */
-    private function getQRCodeSVG(string $text, string $level, int $size, int $margin): Response
-    {
-        //QRcode::svg('PHP QR Code :)', 'id-of-svg', false, QR_ECLEVEL_L, 250);
-
-        return $this->getQR()->generateSVG($text, $level, $size, $margin);
-    }
-
-    /**
-     *
-     * @Route("/test", name="qrcode_test")
-     *
-     * @return Response
-     */
-    #[Route('/test', name: 'qrcode_test')]
-    public function testAction(): Response
-    {
-        return $this->getQR()->generatePNG("test", 'Q', 4, 3);
-    }
-
-    /**
-     *
-     * @Route("/png/{level}/{size}/{margin}", name="qrcode_png")
-     *
-     * @param Request $request
-     * @param string $level
-     * @param int $size
-     * @param int $margin
-     * @return Response
-     */
-    #[Route('/png/{level}/{size}/{margin}', name: 'qrcode_png')]
+    #[Route('/png/{level}/{size}/{margin}', name: 'qrcode_png', requirements: ['level' => 'L|M|Q|H', 'size' => '\d+', 'margin' => '\d+'])]
     public function getQRCodePNGAction(Request $request, string $level, int $size, int $margin): Response
     {
-        $text = 'getQRCodePNGAction has no text content';
+        $this->denyUnlessAllowed();
 
-        if ($request->query->has('text')) {
-            $text = $request->query->get('text');
-        }
+        $text = $this->resolveText($request);
+        $this->assertValidParams($size, $margin);
 
-        if (trim($text) == '') {
-            $text = 'EMPTY';
-        }
-
-        return $this->getQRCodePNG($text, $level, $size, $margin);
+        return $this->respond($this->qr->generatePNG($text, $level, $size, $margin), $request);
     }
 
-    /**
-     *
-     * @Route("/png", name="qrcode_png_default")
-     *
-     * @param Request $request
-     * @return Response
-     */
     #[Route('/png', name: 'qrcode_png_default')]
     public function getQRCodePNGwDefaultsAction(Request $request): Response
     {
-        $text = 'getQRCodePNGwDefaultsAction has no text content';
+        $this->denyUnlessAllowed();
 
-        if ($request->query->has('text')) {
-            $text = $request->query->get('text');
-        }
+        $text = $this->resolveText($request);
 
-        if (trim($text) == '') {
-            $text = 'EMPTY';
-        }
-
-        $level = $this->getParameter('phpqrcode.default.level');
-        $size = intval($this->getParameter('phpqrcode.default.size'));
-        $margin = intval($this->getParameter('phpqrcode.default.margin'));
-
-        return $this->getQRCodePNG($text, $level, $size, $margin);
+        return $this->respond(
+            $this->qr->generatePNG($text, $this->defaultLevel, $this->defaultSize, $this->defaultMargin),
+            $request
+        );
     }
 
-    /**
-     *
-     * @Route("/svg/{level}/{size}/{margin}", name="qrcode_svg")
-     *
-     * @param Request $request
-     * @param string $level
-     * @param int $size
-     * @param int $margin
-     * @return Response
-     */
-    #[Route('/svg/{level}/{size}/{margin}', name: 'qrcode_svg')]
+    #[Route('/svg/{level}/{size}/{margin}', name: 'qrcode_svg', requirements: ['level' => 'L|M|Q|H', 'size' => '\d+', 'margin' => '\d+'])]
     public function getQRCodeSVGAction(Request $request, string $level, int $size, int $margin): Response
     {
-        $text = 'getQRCodeSVGAction has no text content';
+        $this->denyUnlessAllowed();
 
-        if ($request->query->has('text')) {
-            $text = $request->query->get('text');
-        }
+        $text = $this->resolveText($request);
+        $this->assertValidParams($size, $margin);
 
-        if (trim($text) == '') {
-            $text = 'EMPTY';
-        }
-
-        return $this->getQRCodeSVG($text, $level, $size, $margin);
+        return $this->respond($this->qr->generateSVG($text, $level, $size, $margin), $request);
     }
 
-    /**
-     *
-     * @Route("/svg", name="qrcode_svg_default")
-     *
-     * @param Request $request
-     * @return Response
-     */
     #[Route('/svg', name: 'qrcode_svg_default')]
     public function getQRCodeSVGwDefaultsAction(Request $request): Response
     {
-        $text = 'getQRCodeSVGwDefaultsAction has no text content';
+        $this->denyUnlessAllowed();
 
-        if ($request->query->has('text')) {
-            $text = $request->query->get('text');
+        $text = $this->resolveText($request);
+
+        return $this->respond(
+            $this->qr->generateSVG($text, $this->defaultLevel, $this->defaultSize, $this->defaultMargin),
+            $request
+        );
+    }
+
+    /**
+     * Enforce the configured access role, if any.
+     */
+    private function denyUnlessAllowed(): void
+    {
+        if (null !== $this->accessRole) {
+            $this->denyAccessUnlessGranted($this->accessRole);
+        }
+    }
+
+    /**
+     * Read and validate the ?text= query parameter (DoS-bounded).
+     */
+    private function resolveText(Request $request): string
+    {
+        $text = $request->query->getString('text');
+
+        if (\strlen($text) > $this->maxTextLength) {
+            throw new BadRequestHttpException(sprintf('Parameter "text" exceeds the maximum length of %d bytes.', $this->maxTextLength));
         }
 
-        if (trim($text) == '') {
-            $text = 'EMPTY';
+        $text = trim($text);
+
+        return '' === $text ? 'EMPTY' : $text;
+    }
+
+    /**
+     * Clamp/whitelist the numeric route parameters.
+     */
+    private function assertValidParams(int $size, int $margin): void
+    {
+        if ($size < 1 || $size > 10) {
+            throw new BadRequestHttpException('Parameter "size" must be between 1 and 10.');
         }
 
-        $level = $this->getParameter('phpqrcode.default.level');
-        $size = intval($this->getParameter('phpqrcode.default.size'));
-        $margin = intval($this->getParameter('phpqrcode.default.margin'));
+        if ($margin < 0 || $margin > 100) {
+            throw new BadRequestHttpException('Parameter "margin" must be between 0 and 100.');
+        }
+    }
 
-        return $this->getQRCodeSVG($text, $level, $size, $margin);
+    /**
+     * Honour conditional requests (304) for the cacheable QR response.
+     */
+    private function respond(Response $response, Request $request): Response
+    {
+        $response->isNotModified($request);
+
+        return $response;
     }
 }

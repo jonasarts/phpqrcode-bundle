@@ -1,21 +1,30 @@
 phpqrcode-bundle
 ================
 
-This bundle provides simplified access to the PHP QR Code class for the Symfony framework.
+Simplified QR code generation for the Symfony framework.
 
-[![Latest Stable Version](https://poser.pugx.org/jonasarts/phpqrcode-bundle/v/stable.png)](https://packagist.org/packages/jonasarts/phpqrcode-bundle)
+[![Latest Stable Version](https://poser.pugx.org/jonasarts/phpqrcode-bundle/v)](https://packagist.org/packages/jonasarts/phpqrcode-bundle)
+[![Total Downloads](https://poser.pugx.org/jonasarts/phpqrcode-bundle/downloads)](https://packagist.org/packages/jonasarts/phpqrcode-bundle)
+[![License](https://poser.pugx.org/jonasarts/phpqrcode-bundle/license)](https://packagist.org/packages/jonasarts/phpqrcode-bundle)
+[![CI](https://github.com/jonasarts/phpqrcode-bundle/actions/workflows/ci.yml/badge.svg)](https://github.com/jonasarts/phpqrcode-bundle/actions/workflows/ci.yml)
+
+Requires PHP 8.4 (with the `gd` extension) and Symfony `^7.0 || ^8.0`.
 
 Installation
 ------------
 
-All the installation instructions are located in the [documentation](https://github.com/jonasarts/phpqrcode-bundle/blob/master/docs/index.md).
+All installation instructions are in the [documentation](docs/index.md).
+
+Documentation
+-------------
+
+* [Documentation index](docs/index.md)
+* [Change log](CHANGELOG.md)
 
 License
 -------
 
-This bundle is under the MIT license. See the complete license in the bundle.
+This bundle is released under the MIT license. See [LICENSE](LICENSE).
 
-The most recent version:
-[LICENSE](https://github.com/jonasarts/phpqrcode-bundle/blob/master/LICENSE)
-
-This bundle uses the [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode) package.
+This bundle uses the
+[chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode) package.

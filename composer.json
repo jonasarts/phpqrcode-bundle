@@ -1,22 +1,44 @@
 {
     "name": "jonasarts/phpqrcode-bundle",
     "description": "A PHP QR Code Bundle for Symfony",
-    "keywords": ["QR", "Code"],
-    "homepage": "https://github.com/jonasarts/phpqrcode-bundle",
-    "type": "symfony-bundle",
     "license": "MIT",
+    "type": "symfony-bundle",
+    "keywords": [
+        "QR",
+        "Code"
+    ],
     "authors": [
         {
             "name": "Jonas Hauser",
             "email": "symfony@jonasarts.com",
-            "homepage": "http://www.jonasarts.com"
+            "homepage": "https://www.jonasarts.com"
         }
     ],
-    "minimum-stability": "stable",
+    "homepage": "https://github.com/jonasarts/phpqrcode-bundle",
     "require": {
-        "php": ">=8.2",
-        "chillerlan/php-qrcode": "^4.3||^5.0"
+        "php": ">=8.4",
+        "ext-gd": "*",
+        "chillerlan/php-qrcode": "^6.0",
+        "symfony/config": "^7.0 || ^8.0",
+        "symfony/dependency-injection": "^7.0 || ^8.0",
+        "symfony/framework-bundle": "^7.0 || ^8.0",
+        "symfony/http-foundation": "^7.0 || ^8.0",
+        "symfony/http-kernel": "^7.0 || ^8.0",
+        "symfony/routing": "^7.0 || ^8.0",
+        "symfony/yaml": "^7.0 || ^8.0"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^12.0 || ^13.0",
+        "rector/rector": "^2.0",
+        "symfony/browser-kit": "^7.0 || ^8.0",
+        "symfony/css-selector": "^7.0 || ^8.0",
+        "symfony/phpunit-bridge": "^7.0 || ^8.0",
+        "symfony/security-bundle": "^7.0 || ^8.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "jonasarts\\Bundle\\PHPQRCodeBundle\\": "src/"
@@ -26,5 +48,17 @@
         "psr-4": {
             "jonasarts\\Bundle\\PHPQRCodeBundle\\Tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "cs": "php-cs-fixer fix",
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "phpstan": "phpstan analyse",
+        "rector": "rector process",
+        "rector-check": "rector process --dry-run",
+        "test": "phpunit --testsuite unit",
+        "test-integration": "phpunit --testsuite integration"
     }
 }
