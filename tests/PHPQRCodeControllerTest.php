@@ -13,11 +13,25 @@ declare(strict_types=1);
 
 namespace jonasarts\Bundle\PHPQRCodeBundle\Tests;
 
+use Override;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class PHPQRCodeControllerTest extends WebTestCase
 {
+    /**
+     * Booting the kernel registers an error/exception handler that the framework
+     * does not always restore; drop it so PHPUnit does not flag the test as risky
+     * for leaking a handler.
+     */
+    #[Override]
+    protected function tearDown(): void
+    {
+        restore_exception_handler();
+
+        parent::tearDown();
+    }
+
     private function browser(): KernelBrowser
     {
         return self::createClient();

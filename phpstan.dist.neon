@@ -2,5 +2,10 @@ parameters:
     level: 8
     paths:
         - src
+        - tests
+    excludePaths:
+        # Framework glue: MicroKernelTrait invokes configureContainer() via
+        # reflection, which PHPStan cannot see (reported as an unused method).
+        - tests/TestKernel.php
     bootstrapFiles:
         - vendor/autoload.php

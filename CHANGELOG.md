@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.2] - 2026-06-28
+
+### Fixed
+
+- Test hygiene: the controller integration test restores the exception handler
+  in `tearDown()` (removes the PHPUnit "risky" warning), and PHPStan (level 8)
+  now also analyses `tests/`.
+
 ## [8.0.1] - 2026-06-28
 
 ### Fixed
