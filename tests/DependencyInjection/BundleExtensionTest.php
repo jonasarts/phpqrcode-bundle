@@ -36,6 +36,7 @@ final class BundleExtensionTest extends TestCase
         // test container works across the whole supported Symfony range.
         $container->setParameter('kernel.environment', 'test');
         $container->setParameter('kernel.build_dir', sys_get_temp_dir());
+
         $extension = new PHPQRCodeBundle()->getContainerExtension();
 
         self::assertNotNull($extension);
